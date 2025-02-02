@@ -18,3 +18,88 @@ model User {
   username String @unique
   password String
 }
+
+model Field {
+  fieldCode     String @id
+  fieldName     String
+  fieldLocation String
+  fieldSize     String
+  fieldImage1   String
+
+  cropCode String
+  crop     Crop   @relation(fields: [cropCode], references: [cropCode])
+
+  staff      Staff[]
+  equipments Equipment[]
+  logs       Log[]
+}
+
+model Crop {
+  cropCode       String  @id
+  commonName     String
+  scientificName String
+  image          String
+  category       String
+  season         String
+  logs           Log[]
+  fields         Field[]
+}
+
+model Staff {
+  staffId     String  @id
+  firstName   String
+  lastName    String
+  address     String
+  designation String
+  gender      String
+  contact     String
+  email       String
+  vehicleId   String
+  vehicle     Vehicle @relation(fields: [vehicleId], references: [vehicleId])
+
+  fieldCode String
+  field     Field  @relation(fields: [fieldCode], references: [fieldCode])
+
+  logs StaffLog[]
+}
+
+model Equipment {
+  equipmentId     String @id
+  equipmentName   String
+  equipmentType   String
+  equipmentStatus String
+  fieldCode       String
+  field           Field  @relation(fields: [fieldCode], references: [fieldCode])
+}
+
+model Vehicle {
+  vehicleId     String  @id
+  type          String
+  model         String
+  licensePlate  String
+  assignedStaff Staff[]
+}
+
+model Log {
+  logCode       String @id
+  logDate       String
+  logDetails    String
+  observedImage String
+  fieldCode     String
+  cropCode      String
+
+  field Field @relation(fields: [fieldCode], references: [fieldCode])
+  crop  Crop  @relation(fields: [cropCode], references: [cropCode])
+
+  staffLogs StaffLog[]
+}
+
+model StaffLog {
+  staffId String
+  logCode String
+
+  staff Staff @relation(fields: [staffId], references: [staffId])
+  log   Log   @relation(fields: [logCode], references: [logCode])
+
+  @@id([staffId, logCode])
+}
