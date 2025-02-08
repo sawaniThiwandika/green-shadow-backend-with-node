@@ -48,3 +48,16 @@ export async function updateVehicle(code:string,vehicle :Vehicle){
     }
 
 }
+
+export async function vehicleDelete(code:string){
+    try{
+        await prisma.vehicle.delete({
+            where: {vehicleId:code},
+
+        });
+        console.log('item deleted :',code);
+    }
+    catch (err){
+        console.log("error deleting item ",err)
+    }
+}

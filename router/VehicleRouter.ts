@@ -1,7 +1,7 @@
 import express from "express";
 import {Vehicle} from "../model/VehicleModel";
 import {
-    addVehicle, getAllVehicles, updateVehicle
+    addVehicle, getAllVehicles, updateVehicle, vehicleDelete
 } from "../database/vehicle-data";
 
 
@@ -18,10 +18,10 @@ router.post("/add", async(req, res) => {
     }
 })
 
-router.delete("/delete/:code", async (req, res) => {
-    const code: string  = req.params.code;
+router.delete("/delete/:vehicleId", async (req, res) => {
+    const code: string  = req.params.vehicleId;
     try{
-        //await VehicleDelete(code);
+        await vehicleDelete(code);
         res.send('Vehicle Deleted');
     }catch(err){
         console.log("error deleting Vehicle", err);
