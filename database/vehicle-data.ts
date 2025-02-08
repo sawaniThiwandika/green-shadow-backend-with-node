@@ -1,10 +1,9 @@
 import { PrismaClient } from "@prisma/client";
 import {Vehicle} from "../model/VehicleModel";
-import {Staff} from "../model/StaffModel";
 const prisma = new PrismaClient();
+
+
 export async function addVehicle(vehicle :Vehicle) {
-
-
 
     const addedVehicle = await prisma.vehicle.create({
         data: {
@@ -19,4 +18,33 @@ export async function addVehicle(vehicle :Vehicle) {
         },
     });
     console.log("Vehicle created:", addedVehicle);
+}
+
+export async function getAllVehicles(){
+    try{
+        return await prisma.vehicle.findMany();
+    }catch(err){
+        console.log("error getting vehicles from prisma data",err);
+    }
+}
+
+export async function updateVehicle(code:string,vehicle :Vehicle){
+    try{
+        await prisma.vehicle.update({
+            where:{ vehicleId : code},
+            data:{
+                licensePlate: vehicle.licensePlate,
+                model:vehicle.model,
+                type:vehicle.type,
+                assignedStaff: {
+                    connect: vehicle.assignedStaff.map((id) => ({ staffId: id }))
+                }
+            }
+        })
+    }
+    catch (err){
+        console.log("error: "+err);
+
+    }
+
 }

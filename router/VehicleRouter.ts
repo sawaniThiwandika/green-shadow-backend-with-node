@@ -1,7 +1,7 @@
 import express from "express";
 import {Vehicle} from "../model/VehicleModel";
 import {
-    addVehicle
+    addVehicle, getAllVehicles, updateVehicle
 } from "../database/vehicle-data";
 
 
@@ -29,12 +29,12 @@ router.delete("/delete/:code", async (req, res) => {
 })
 
 
-router.put("/update/:code",async (req, res) => {
-    const code:string = req.params.code;
+router.put("/update/:vehicleId",async (req, res) => {
+    const code:string = req.params.vehicleId;
     const vehicle :Vehicle = req.body;
 
     try{
-       // await VehicleUpdate(code, vehicle);
+        await updateVehicle(code, vehicle);
         res.send('Vehicle Updated');
     }catch(err){
         console.log("error updating Vehicle", err);
@@ -43,8 +43,8 @@ router.put("/update/:code",async (req, res) => {
 
 router.get("/getAll", async (req, res) => {
     try{
-        //const vehicles=  await getAllVehicles();
-       // res.json(vehicles);
+        const vehicles=  await getAllVehicles();
+        res.json(vehicles);
     }catch(err){
         console.log("error getting vehicles", err);
     }
