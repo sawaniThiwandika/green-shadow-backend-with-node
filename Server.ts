@@ -1,9 +1,11 @@
 import express from 'express'
 
 const cors = require('cors');
-//import {CustomerRouter} from "./router/CustomerRouter";
 
 import VehicleRouter from "./router/VehicleRouter";
+import FieldRouter from "./router/FieldRouter";
+import CropRouter from "./router/CropRouter";
+import path from "path";
 const port:number=3000;
 
 
@@ -20,7 +22,9 @@ app.use(cors({
 
 app.use(express.json())
 app.use('/vehicle',VehicleRouter)
-
+app.use('/field',FieldRouter)
+app.use('/crop',CropRouter)
+app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 app.listen(port,()=>{
     console.log(`Server started at port : ${port}`);
 })
