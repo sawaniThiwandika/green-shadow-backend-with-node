@@ -1,0 +1,17 @@
+import multer, { Multer } from "multer";
+import path from "path";
+
+export class ImageUploader {
+    public upload: Multer;
+
+    constructor() {
+        this.upload = multer({
+            storage: multer.diskStorage({
+                destination: "uploads/",
+                filename: (req, file, cb) => {
+                    cb(null, `${Date.now()}${path.extname(file.originalname)}`); // Unique filename
+                },
+            }),
+        });
+    }
+}
