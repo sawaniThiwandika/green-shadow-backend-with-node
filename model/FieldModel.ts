@@ -4,7 +4,7 @@ export interface Field{
     fieldLocation: string;
     fieldSize: string;
     fieldImage1: string;
-    crops: string;//
+    crop: string;
     staff: string[];
     equipment: string[];
     log:string[];
