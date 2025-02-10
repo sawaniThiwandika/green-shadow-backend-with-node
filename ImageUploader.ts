@@ -4,10 +4,10 @@ import path from "path";
 export class ImageUploader {
     public upload: Multer;
 
-    constructor() {
+    constructor(private type: string) {
         this.upload = multer({
             storage: multer.diskStorage({
-                destination: "uploads/",
+                destination: `uploads/${type}/`,
                 filename: (req, file, cb) => {
                     cb(null, `${Date.now()}${path.extname(file.originalname)}`); // Unique filename
                 },
