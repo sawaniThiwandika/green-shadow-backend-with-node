@@ -2,7 +2,7 @@ import express from "express";
 import {Vehicle} from "../model/VehicleModel";
 import {
     addVehicle, getAllVehicles, updateVehicle, vehicleDelete
-} from "../database/vehicle-data";
+} from "../database/vehicle-service";
 
 
 const router = express.Router();
@@ -39,7 +39,7 @@ router.put("/update/:vehicleId",async (req, res) => {
     }catch(err){
         console.log("error updating Vehicle", err);
     }
-})
+});
 
 router.get("/getAll", async (req, res) => {
     try{
