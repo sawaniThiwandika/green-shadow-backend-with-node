@@ -7,7 +7,7 @@ import {updateVehicle} from "../database/vehicle-service";
 
 const router = express.Router();
 
-let imageUploader = new ImageUploader();
+let imageUploader = new ImageUploader("crop");
 
 
 router.post("/add",
