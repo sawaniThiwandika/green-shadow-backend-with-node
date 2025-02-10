@@ -1,5 +1,6 @@
 import { PrismaClient } from "@prisma/client";
 import { Crop } from "../model/CropModel";
+import {Vehicle} from "../model/VehicleModel";
 
 const prisma = new PrismaClient();
 
@@ -46,4 +47,27 @@ export async function cropDelete(code:string){
     catch (err){
         console.log("error deleting crop ",err)
     }
+}
+
+export async function updateCrop(code:string,crop :Crop){
+    try{
+        await prisma.crop.update({
+            where:{ cropCode : code},
+            data:{
+                commonName: crop.commonName,
+                scientificName: crop.scientificName,
+                image: crop.image,
+                category: crop.category,
+                season: crop.season,
+                fields: {
+                    connect: crop.fieldDetails.length > 0 ? crop.fieldDetails.map((code) => ({ fieldCode: code })) : []
+                }
+            }
+        })
+    }
+    catch (err){
+        console.log("error: "+err);
+
+    }
+
 }

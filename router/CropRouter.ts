@@ -1,7 +1,9 @@
 import express from "express";
 import { body, validationResult } from "express-validator";
-import { addCrop, cropDelete, getAllCrops } from "../database/crop-service";
+import {addCrop, cropDelete, getAllCrops, updateCrop} from "../database/crop-service";
 import {ImageUploader} from "../ImageUploader";
+import {Vehicle} from "../model/VehicleModel";
+import {updateVehicle} from "../database/vehicle-service";
 
 const router = express.Router();
 
@@ -73,5 +75,50 @@ router.delete("/delete/:cropCode", async (req, res) => {
         res.status(500).send('Error deleting crop');
     }
 });
+
+router.put("/update/:cropCode",
+    imageUploader.upload.single("cropImage"),
+    [
+        body('cropCode').notEmpty().withMessage('Crop code is required'),
+        body('commonName').notEmpty().withMessage('Common name is required'),
+        body('scientificName').notEmpty().withMessage('Scientific name is required'),
+        body('category').notEmpty().withMessage('Category is required'),
+        body('season').notEmpty().withMessage('Season is required'),
+    ],
+    async (req: any, res: any) => {
+        const errors = validationResult(req);
+        if (!errors.isEmpty()) {
+            return res.status(400).json({ errors: errors.array() });
+        }
+
+        try {
+            const { cropCode, commonName, scientificName, category, season, fieldDetails } = req.body;
+            const file = req.file;
+
+            let cropImage = "";
+            if (file) {
+                cropImage=file.filename;
+            }
+
+            const crop = {
+                cropCode,
+                commonName,
+                scientificName,
+                image: cropImage,
+                category,
+                season,
+                fieldDetails: fieldDetails ? JSON.parse(fieldDetails) : [],
+            };
+
+            const updatedCrop = await updateCrop(cropCode,crop);
+            res.status(201).json({ message: "Crop updated successfully", data: updatedCrop });
+        } catch (err) {
+            console.error("Error adding crop:", err);
+            res.status(500).json({ error: "Error updating crop", details: err });
+        }
+
+});
+
+
 
 export default router;
