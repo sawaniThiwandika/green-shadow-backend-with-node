@@ -1,5 +1,6 @@
 import { PrismaClient } from "@prisma/client";
 import {Field} from "../model/FieldModel";
+import {Crop} from "../model/CropModel";
 const prisma = new PrismaClient();
 
 
@@ -61,4 +62,39 @@ export async function fieldDelete(code:string){
     catch (err){
         console.log("error deleting field ",err)
     }
+}
+
+export async function updateField(code:string,field :Field){
+    try{
+        await prisma.field.update({
+            where:{ fieldCode : code},
+            data:{
+                fieldName:field.fieldName,
+                fieldLocation:field.fieldLocation,
+                fieldSize:field.fieldSize,
+                fieldImage1:field.fieldImage1,
+                crop: {
+                    connect:  { cropCode: field.crop }
+                },
+                staff: {
+                    connect: field.staff?.map((id) => ({ staffId: id })) || [],
+                },
+                equipments: {
+                    connect: field.equipment?.map((id) => ({ equipmentId: id })) || [],
+                },
+                logs: {
+                    connect: field.log?.map((id) => ({ logCode: id })) || [],
+                },
+
+            },
+        });
+        console.log("Field Updated:");
+
+    }
+    catch (err){
+        console.log("error: "+err);
+    }
+
+
+
 }
