@@ -39,3 +39,26 @@ export async function addField(field :Field) {
     console.log("Field created:", addedField);
     return addedField;
 }
+
+export async function getAllFields(){
+    try{
+        let newVar = await prisma.field.findMany();
+       // console.log("fetch data of field : "+newVar[0].cropCode);
+        return newVar ;
+    }catch(err){
+        console.log("error getting fields from prisma data",err);
+    }
+}
+
+export async function fieldDelete(code:string){
+    try{
+        await prisma.field.delete({
+            where: {fieldCode:code},
+
+        });
+        console.log('field deleted :',code);
+    }
+    catch (err){
+        console.log("error deleting field ",err)
+    }
+}

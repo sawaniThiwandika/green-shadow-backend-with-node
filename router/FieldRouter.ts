@@ -1,10 +1,12 @@
 import express from "express";
-import { addField } from "../database/field-service";
+import {addField, fieldDelete, getAllFields} from "../database/field-service";
 import multer from "multer";
 import path from "path";
 import fs from "fs"; // Import fs to read files
 import { body, validationResult } from "express-validator";
 import {ImageUploader} from "../ImageUploader";
+import {cropDelete, getAllCrops} from "../database/crop-service";
+import {Field} from "../model/FieldModel";
 
 const router = express.Router();
 
@@ -46,7 +48,6 @@ router.post("/add",
 
             console.log("Before send to the service: "+field.crop);
 
-            // Add the field to the database
             const addedField = await addField(field);
            res.status(201).json({ message: "Field added successfully", data: addedField });
         } catch (err) {
@@ -55,5 +56,31 @@ router.post("/add",
         }
     }
 );
+
+router.get("/getAll", async (req, res) => {
+    try {
+        const field:any = await getAllFields();
+        //console.log("Fields  in router:"+field[0].cropCode);
+        res.json(field);
+    } catch (err) {
+        console.log("Error getting fields:", err);
+        res.status(500).json({ error: "Error retrieving fields" });
+    }
+});
+
+router.delete("/delete/:fieldCode", async (req, res) => {
+    const code = req.params.fieldCode;
+    try {
+        await fieldDelete(code);
+        res.status(200).send('Field deleted successfully');
+    } catch (err) {
+        console.log("Error deleting field:", err);
+        res.status(500).send('Error deleting field');
+    }
+});
+
+
+
+
 
 export default router;
