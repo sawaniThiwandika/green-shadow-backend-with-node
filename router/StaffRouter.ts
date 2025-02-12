@@ -1,6 +1,8 @@
 import express from "express";
 import {Staff} from "../model/StaffModel";
-import {addStaff, getAllStaff} from "../database/staff-service";
+import {addStaff, getAllStaff, updateStaff} from "../database/staff-service";
+import {Vehicle} from "../model/VehicleModel";
+import {updateVehicle} from "../database/vehicle-service";
 
 const router = express.Router();
 
@@ -24,5 +26,16 @@ router.get("/getAll", async (req, res) => {
     }
 });
 
+router.put("/update/:staffId",async (req, res) => {
+    const code:string = req.params.staffId;
+    const staff :Staff = req.body;
+
+    try{
+        await updateStaff(code, staff);
+        res.send('Staff Updated');
+    }catch(err){
+        console.log("error updating Staff", err);
+    }
+});
 
 export default router;
