@@ -63,3 +63,15 @@ export async function updateStaff(code:string,staff :Staff){
     }
 
 }
+export async function staffDelete(code:string){
+    try{
+        await prisma.staff.delete({
+            where: {staffId:code},
+
+        });
+        console.log(' deleted staff:',code);
+    }
+    catch (err){
+        console.log("error deleting staff ",err)
+    }
+}
