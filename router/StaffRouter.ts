@@ -1,8 +1,7 @@
 import express from "express";
 import {Staff} from "../model/StaffModel";
-import {addStaff, getAllStaff, updateStaff} from "../database/staff-service";
-import {Vehicle} from "../model/VehicleModel";
-import {updateVehicle} from "../database/vehicle-service";
+import {addStaff, getAllStaff, staffDelete, updateStaff} from "../database/staff-service";
+
 
 const router = express.Router();
 
@@ -37,5 +36,16 @@ router.put("/update/:staffId",async (req, res) => {
         console.log("error updating Staff", err);
     }
 });
+
+router.delete("/delete/:staffId", async (req, res) => {
+    const code: string  = req.params.staffId;
+    try{
+        await staffDelete(code);
+        res.send('staff Deleted');
+    }catch(err){
+        console.log("error deleting staff", err);
+    }
+});
+
 
 export default router;
