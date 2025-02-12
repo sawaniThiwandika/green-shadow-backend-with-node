@@ -2,8 +2,7 @@ import express from "express";
 import { body, validationResult } from "express-validator";
 import {addCrop, cropDelete, getAllCrops, updateCrop} from "../database/crop-service";
 import {ImageUploader} from "../ImageUploader";
-import {Vehicle} from "../model/VehicleModel";
-import {updateVehicle} from "../database/vehicle-service";
+
 
 const router = express.Router();
 
