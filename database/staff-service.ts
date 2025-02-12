@@ -26,3 +26,11 @@ export async function addStaff(staff :Staff) {
     });
     console.log("Vehicle created:", addedMem);
 }
+
+export async function getAllStaff(){
+    try{
+        return await prisma.staff.findMany();
+    }catch(err){
+        console.log("error getting staff from prisma data",err);
+    }
+}
