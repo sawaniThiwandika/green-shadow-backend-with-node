@@ -1,12 +1,7 @@
 import express from "express";
 import {addField, fieldDelete, getAllFields, updateField} from "../database/field-service";
-import multer from "multer";
-import path from "path";
-import fs from "fs"; // Import fs to read files
 import {body, validationResult} from "express-validator";
 import {ImageUploader} from "../ImageUploader";
-import {cropDelete, getAllCrops} from "../database/crop-service";
-import {Field} from "../model/FieldModel";
 
 const router = express.Router();
 
