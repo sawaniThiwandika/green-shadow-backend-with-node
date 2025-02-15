@@ -38,3 +38,11 @@ export async function addLog(log: Log) {
         throw new Error("Could not add log: " + error);
     }
 }
+
+export async function getAllLogs(){
+    try{
+        return await prisma.log.findMany();
+    }catch(err){
+        console.log("error getting logs from prisma data",err);
+    }
+}
