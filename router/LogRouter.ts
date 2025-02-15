@@ -1,7 +1,8 @@
 import express from "express";
 import {ImageUploader} from "../ImageUploader";
 import {body, validationResult} from "express-validator";
-import {addLog} from "../database/log-service";
+import {addLog, getAllLogs} from "../database/log-service";
+import {getAllFields} from "../database/field-service";
 
 const router = express.Router();
 
@@ -52,4 +53,17 @@ router.post("/add",
         }
     }
 );
+
+router.get("/getAll", async (req, res) => {
+    try {
+        const logs: any = await getAllLogs();
+        //console.log("Fields  in router:"+field[0].cropCode);
+        res.json(logs);
+    } catch (err) {
+        console.log("Error getting logs:", err);
+        res.status(500).json({error: "Error retrievinglogs"});
+    }
+});
+
+
 export default router;
