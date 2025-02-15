@@ -5,6 +5,7 @@ import FieldRouter from "./router/FieldRouter";
 import CropRouter from "./router/CropRouter";
 import path from "path";
 import StaffRouter from "./router/StaffRouter";
+import LogRouter from "./router/LogRouter";
 
 const port:number=3000;
 const app=express();
@@ -21,6 +22,7 @@ app.use('/vehicle',VehicleRouter)
 app.use('/field',FieldRouter)
 app.use('/crop',CropRouter)
 app.use('/staff',StaffRouter)
+app.use('/log',LogRouter)
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
 app.listen(port,()=>{
