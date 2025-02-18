@@ -6,6 +6,7 @@ import CropRouter from "./router/CropRouter";
 import path from "path";
 import StaffRouter from "./router/StaffRouter";
 import LogRouter from "./router/LogRouter";
+import authRoutes, {authenticateToken} from "./router/AuthRoutes";
 
 const port:number=3000;
 const app=express();
@@ -16,7 +17,13 @@ app.use(cors({
     credentials: true // If you need to send cookies
 }));
 
-app.use(express.json())
+app.use(express.json());
+
+console.log("Loaded SECRET_KEY:", process.env.SECRET_KEY);
+
+app.use('/auth', authRoutes);
+
+app.use(authenticateToken);
 
 app.use('/vehicle',VehicleRouter)
 app.use('/field',FieldRouter)
