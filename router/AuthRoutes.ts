@@ -22,7 +22,7 @@ router.post("/login", async (req:express.Request, res:express.Response) => {
         if(isVerified){
             const token = jwt.sign({ userName }, process.env.SECRET_KEY as Secret, {expiresIn: "1m"});
             const refreshToken = jwt.sign({ userName }, process.env.REFRESH_TOKEN as Secret, {expiresIn: "7d"});
-             res.json({accessToken : token, refreshToken : refreshToken}).send;
+             res.json({accessToken : token, refreshToken : refreshToken});
         }else{
             res.status(403).send('Invalid credentials');
         }
@@ -31,7 +31,7 @@ router.post("/login", async (req:express.Request, res:express.Response) => {
         res.status(400).send(err);
     }
 
-})
+});
 
 
 router.post("/register", async (req, res) => {
@@ -51,7 +51,7 @@ router.post("/register", async (req, res) => {
         res.status(401).json(err);
     }
 
-})
+});
 
 router.post("/refresh-token", async (req, res) => {
     const authHeader = req.headers.authorization;
@@ -60,14 +60,14 @@ router.post("/refresh-token", async (req, res) => {
     if(!refresh_token)res.status(401).send('No token provided');
 
     try{
-        const payload = jwt.verify(refresh_token as string, process.env.REFRESH_TOKEN as Secret) as {username: string, iat: number};
-        const token = jwt.sign({ username: payload.username }, process.env.SECRET_KEY as Secret, {expiresIn: "1m"});
+        const payload = jwt.verify(refresh_token as string, process.env.REFRESH_TOKEN as Secret) as {userName: string, iat: number};
+        const token = jwt.sign({ userName: payload.userName }, process.env.SECRET_KEY as Secret, {expiresIn: "1m"});
         res.json({accessToken : token});
     }catch(err){
         console.log(err);
         res.status(401).json(err);
     }
-})
+});
 
 export function authenticateToken(req : express.Request, res : express.Response, next : express.NextFunction){
     const authHeader = req.headers.authorization;
@@ -77,13 +77,12 @@ export function authenticateToken(req : express.Request, res : express.Response,
     if(!token)res.status(401).send('No token provided');
 
     try{
-        const payload = jwt.verify(token as string, process.env.SECRET_KEY as Secret) as {username: string, iat: number};
-        console.log(payload.username);
-        req.body.username = payload.username;
+        const payload = jwt.verify(token as string, process.env.SECRET_KEY as Secret) as {userName: string, iat: number};
+        console.log(payload.userName);
+        req.body.username= payload.userName;
         next();
     }catch(err){
         res.status(401).send(err);
     }
 }
-
 export default router;
