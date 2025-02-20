@@ -10,7 +10,7 @@ const router = express.Router();
 let imageUploader = new ImageUploader("field");
 
 router.post("/add",
-    imageUploader.upload.single("fieldImage1"), // Middleware to handle file upload
+    imageUploader.upload.single("fieldImage1"),
     [
         body('fieldCode').notEmpty().withMessage('Field code is required'),
         body('fieldName').notEmpty().withMessage('Field name is required'),
