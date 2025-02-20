@@ -2,6 +2,8 @@ import express from "express";
 import {addField, fieldDelete, getAllFields, updateField} from "../database/field-service";
 import {body, validationResult} from "express-validator";
 import {ImageUploader} from "../ImageUploader";
+import {generateCropCode} from "../genarate-id/genarateCropCode";
+import {generateFieldCode} from "../genarate-id/gearateFieldCode";
 
 const router = express.Router();
 
@@ -20,12 +22,13 @@ router.post("/add",
         }
 
         try {
-            const {fieldCode, fieldName, fieldLocation, fieldSize, crop, staff, equipment} = req.body;
+            const {fieldName, fieldLocation, fieldSize, crop, staff, equipment} = req.body;
             const file = req.file;
 
             if (!file) {
                 return res.status(400).json({error: "No file uploaded"});
             }
+            const fieldCode=await generateFieldCode();
 
             const fieldImage1 = file.filename;
 

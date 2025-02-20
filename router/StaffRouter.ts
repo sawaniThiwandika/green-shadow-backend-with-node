@@ -1,6 +1,8 @@
 import express from "express";
 import {Staff} from "../model/StaffModel";
 import {addStaff, getAllStaff, staffDelete, updateStaff} from "../database/staff-service";
+import {generateCropCode} from "../genarate-id/genarateCropCode";
+import {generateStaffCode} from "../genarate-id/genarateStaffCode";
 
 
 const router = express.Router();
@@ -8,6 +10,7 @@ const router = express.Router();
 router.post("/add", async(req, res) => {
     const staff: Staff= req.body;
     try{
+        staff.staffId=await generateStaffCode();
         const addedMem = await addStaff(staff);
         res.send('staff Added');
     }catch(err){

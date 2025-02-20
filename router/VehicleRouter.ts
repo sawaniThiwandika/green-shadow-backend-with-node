@@ -4,12 +4,15 @@ import {
     addVehicle, getAllVehicles, updateVehicle, vehicleDelete
 } from "../database/vehicle-service";
 
+import {generateVehicleCode} from "../genarate-id/genarateVehicleCode";
+
 
 const router = express.Router();
 
 router.post("/add", async(req, res) => {
     const vehicle: Vehicle= req.body;
     try{
+        vehicle.vehicleId=await generateVehicleCode();
         const addedVehicle = await addVehicle(vehicle);
         res.send('vehicle Added')
     }catch(err){
@@ -26,7 +29,7 @@ router.delete("/delete/:vehicleId", async (req, res) => {
     }catch(err){
         console.log("error deleting Vehicle", err);
     }
-})
+});
 
 
 router.put("/update/:vehicleId",async (req, res) => {

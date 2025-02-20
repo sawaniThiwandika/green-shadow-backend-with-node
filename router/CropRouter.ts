@@ -2,6 +2,7 @@ import express from "express";
 import { body, validationResult } from "express-validator";
 import {addCrop, cropDelete, getAllCrops, updateCrop} from "../database/crop-service";
 import {ImageUploader} from "../ImageUploader";
+import {generateCropCode} from "../genarate-id/genarateCropCode";
 
 
 const router = express.Router();
@@ -25,13 +26,14 @@ router.post("/add",
         }
 
         try {
-            const { cropCode, commonName, scientificName, category, season, fieldDetails } = req.body;
-            const file = req.file; // Get the uploaded file
+            const { commonName, scientificName, category, season, fieldDetails } = req.body;
+            const file = req.file;
 
             let cropImage = "";
             if (file) {
                 cropImage=file.filename;
             }
+            const cropCode=await generateCropCode();
 
             const crop = {
                 cropCode,
@@ -98,6 +100,7 @@ router.put("/update/:cropCode",
             if (file) {
                 cropImage=file.filename;
             }
+
 
             const crop = {
                 cropCode,
