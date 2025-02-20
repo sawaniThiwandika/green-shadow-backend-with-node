@@ -22,7 +22,7 @@ app.use(express.json());
 console.log("Loaded SECRET_KEY:", process.env.SECRET_KEY);
 
 app.use('/auth', authRoutes);
-
+app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 app.use(authenticateToken);
 
 app.use('/vehicle',VehicleRouter)
@@ -30,7 +30,7 @@ app.use('/field',FieldRouter)
 app.use('/crop',CropRouter)
 app.use('/staff',StaffRouter)
 app.use('/log',LogRouter)
-app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
+
 
 app.listen(port,()=>{
     console.log(`Server started at port : ${port}`);
